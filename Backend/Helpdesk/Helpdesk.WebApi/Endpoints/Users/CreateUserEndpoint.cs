@@ -16,7 +16,7 @@ namespace Helpdesk.WebApi.Endpoints.Users
     public override void Configure()
     {
       Post("api/users/create");
-      AllowAnonymous();
+      Roles("Admin");
     }
     public override async Task HandleAsync(CreateUserModel req, CancellationToken ct)
     {

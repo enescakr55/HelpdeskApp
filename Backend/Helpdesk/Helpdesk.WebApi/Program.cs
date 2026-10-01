@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Helpdesk.Services.Authentication;
 using Helpdesk.Services.Departments;
 using Helpdesk.Services.SupportRequests;
 
@@ -52,6 +53,7 @@ namespace Helpdesk.WebApi
       builder.Services.AddFastEndpoints();
       
       builder.Services.AddScoped<IUserService, UserService>();
+      builder.Services.AddScoped<IAuthService, AuthService>();
       builder.Services.AddScoped<IDepartmentService, DepartmentService>();
       builder.Services.AddScoped<ISupportRequestService, SupportRequestService>();
       builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();

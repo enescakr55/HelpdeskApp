@@ -15,6 +15,7 @@ namespace Helpdesk.Entities
     public string Password { get; set; }
     public string DepartmentId { get; set; }
     public bool IsAdmin { get; set; }
+    public bool IsActive { get; set; }
 
     public Department Department { get; set; }
   }

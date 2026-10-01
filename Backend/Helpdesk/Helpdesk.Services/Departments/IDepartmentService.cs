@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Helpdesk.Services.RequestModels;
+using Helpdesk.Services.ResponseModels;
+using Helpdesk.Services.ResponseModels.Abstract;
 
-namespace Helpdesk.Services.Departments
+namespace Helpdesk.Services.Departments;
+
+public interface IDepartmentService
 {
-  public interface IDepartmentService
-  {
-  }
+  Task<IDataResult<List<DepartmentResponseModel>>> ListAsync(CancellationToken cancellationToken = default);
+  Task<IDataResult<DepartmentResponseModel>> CreateAsync(CreateDepartmentModel model, CancellationToken cancellationToken = default);
+  Task<IDataResult<DepartmentResponseModel>> UpdateAsync(string id, UpdateDepartmentModel model, CancellationToken cancellationToken = default);
+  Task<IDataResult<bool>> DeleteAsync(string id, CancellationToken cancellationToken = default);
 }
