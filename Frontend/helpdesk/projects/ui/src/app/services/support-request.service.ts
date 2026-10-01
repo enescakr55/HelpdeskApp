@@ -6,6 +6,7 @@ import { DataResult } from '../models/responses/data-result';
 import { CreateSupportRequest } from '../models/requests/createSupportRequest';
 import { SupportRequestResponse } from '../models/requests/supportRequestResponse';
 import { SupportRequestTrackResponseModel } from '../models/responses/supportRequestTrackResponseModel';
+import { Result } from '../models/responses/result';
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +44,8 @@ export class SupportRequestService {
   }
   updateMessage(id:string,message:string,updateUserMessage:boolean){
     return this.http.post<DataResult<SupportRequestResponse>>(`${environment.apiUrl}api/support-requests/${id}/message`,{message:message,isUserMessage:updateUserMessage});
+  }
+  deleteSupportRequest(id:string){
+    return this.http.delete<Result>(`${environment.apiUrl}api/support-requests/${id}/delete`);
   }
 }

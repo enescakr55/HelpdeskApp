@@ -13,4 +13,5 @@ public interface ISupportRequestService
   Task<IDataResult<SupportRequestResponseModel>> UpdateStatusAsync(string id, UpdateSupportRequestStatusModel model, CancellationToken cancellationToken = default);
   Task<IDataResult<SupportRequestResponseModel>> AddMessageAsync(string id, AddSupportRequestMessageModel model, CancellationToken cancellationToken = default);
   Task<IDataResult<SupportRequestResponseModel>> AssignDepartmentAsync(string id, string departmentId, CancellationToken cancellationToken = default);
+  Task<IResult> DeleteSupportRequestAsync(string id, CancellationToken ct);
 }

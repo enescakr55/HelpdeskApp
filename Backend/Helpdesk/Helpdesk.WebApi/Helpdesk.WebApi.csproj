@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="Endpoints\Departments\" />
-    <Folder Include="Endpoints\SupportRequests\" />
   </ItemGroup>
 
 </Project>

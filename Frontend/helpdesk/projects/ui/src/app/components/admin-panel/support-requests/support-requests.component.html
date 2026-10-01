@@ -43,13 +43,14 @@
                 <hr>
                 <div class="update-message">
                   <b class="update-message-title">{{updateUserMessage ? 'Kullanıcı Mesajı Güncelleme' : 'Destek Talebi Güncelleme'}}</b>
-                  <textarea class="form-control form-control-sm" [attr.request]="request.id" id="update-message-textarea" style="font-size: 11px;">{{updateUserMessage == false ? request.assignMessage : request.userMessage}}</textarea>
+                  <textarea *ngIf="showTextarea == true" class="form-control form-control-sm" [attr.request]="request.id" id="update-message-textarea" style="font-size: 11px;">{{updateUserMessage == false ? request.assignMessage : request.userMessage}}</textarea>
                   <div class="two-element-container">
                     <div class="two-element-container-left">
                       <label for="update-user-message">
                       <input id="update-user-message" (change)="updateUserMessageInput($event)"  [attr.request]="request.id" style="vertical-align: middle;" name="update-user-message" type="checkbox" value="user"/> Kullanıcı mesajını güncelle</label>
                     </div>
                     <div class="two-element-container-right">
+                      <button type="button" class="btn btn btn-sm btn-danger" style="font-size: 10px;" (click)="deleteSupportRequest(request)">Destek Talebini Sil</button> &nbsp;&nbsp;
                       <button type="button" class="btn btn btn-sm btn-warning" style="font-size: 10px;" (click)="updateMessage(request);">Güncelle</button>
                     </div>
                   </div>

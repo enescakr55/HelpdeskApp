@@ -135,6 +135,18 @@ public class SupportRequestService : ISupportRequestService
     return new SuccessDataResult<List<SupportRequestResponseModel>>("Talep listesi getirildi.", requests);
   }
 
+  public async Task<IResult> DeleteSupportRequestAsync(string id,CancellationToken ct){
+    var supportRequest = dbContext.SupportRequests.SingleOrDefault(x => x.Id == id);
+    if(supportRequest == null){
+      return new ErrorResult("Destek talebi bulunamadı");
+    }
+    if(supportRequest.Status != SupportTypeStatusEnum.Closed && supportRequest.Status != SupportTypeStatusEnum.Resolved){
+      return new ErrorResult("Bir destek talebini silmeden önce çözüme ulaşmalı veya kapalı duruma getirmelisiniz");
+    }
+    dbContext.Remove(supportRequest);
+    await dbContext.SaveChangesAsync();
+    return new SuccessResult("Destek talebi silindi");
+  }
   public async Task<IDataResult<List<SupportRequestResponseModel>>> GetAllForAdminAsync(CancellationToken cancellationToken = default)
   {
     var requests = await dbContext.SupportRequests

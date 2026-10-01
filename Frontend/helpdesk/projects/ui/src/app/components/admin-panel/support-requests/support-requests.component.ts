@@ -16,8 +16,9 @@ export class SupportRequestsComponent implements OnInit {
   requestSearch = '';
   requests: SupportRequestResponse[] = [];
   departments: DepartmentResponseModel[] = [];
-  showDetails:string|null = null;
-  updateUserMessage:boolean = false;
+  showDetails: string | null = null;
+  updateUserMessage: boolean = false;
+  showTextarea:boolean = true;
   readonly statusOptions = [
     { value: 0, label: 'Açık' },
     { value: 1, label: 'İşlemde' },
@@ -30,7 +31,7 @@ export class SupportRequestsComponent implements OnInit {
     private readonly supportRequestService: SupportRequestService,
     private readonly departmentService: DepartmentService,
     private readonly toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadRequests();
@@ -61,8 +62,13 @@ export class SupportRequestsComponent implements OnInit {
     this.supportRequestService.listForAdmin().subscribe({
       next: (response) => {
         this.loadingRequests = false;
-        if (response.success && response.data) this.requests = response.data;
-        else this.toastr.error(response.message || 'Destek talepleri yüklenemedi.');
+        if (response.success && response.data) {
+          this.requests = response.data;
+        }
+
+        else {
+          this.toastr.error(response.message || 'Destek talepleri yüklenemedi.');
+        }
       },
       error: (error) => {
         this.loadingRequests = false;
@@ -117,28 +123,44 @@ export class SupportRequestsComponent implements OnInit {
   statusClass(status: number): string {
     return `status-${status}`;
   }
-  updateUserMessageInput($ev:Event){
+  updateUserMessageInput($ev: Event) {
+    let temp = this.showDetails;
     var checkbox = ($ev.target as HTMLInputElement)
-    if(checkbox.checked){
+    this.showTextarea = false;
+        setTimeout(()=> this.showTextarea = true, 5);
+    if (checkbox.checked) {
       this.updateUserMessage = true;
-    }else{
+    } else {
       this.updateUserMessage = false;
     }
+  }
+  deleteSupportRequest(supportRequest: SupportRequestResponse) {
+    if(window.confirm("Destek bileti silinecek onaylıyor musunuz")) {
+    this.supportRequestService.deleteSupportRequest(supportRequest.id).subscribe({
+      next: (response) => {
+        this.toastr.success(response.message);
+        this.loadRequests();
+      }, error: (err) => {
+        this.toastr.error(err.error?.message || err.error?.Message || "Bir hata oluştu");
+      }
+    })
+    }
+
   }
   showDescription(request: SupportRequestResponse): void {
     //this.toastr.info(request.description, request.requestCode);
     this.showDetails = request.id;
     this.updateUserMessage = false;
-    setTimeout(()=>(document.getElementById("update-user-message") as HTMLInputElement).checked = false,200);
+    setTimeout(() => (document.getElementById("update-user-message") as HTMLInputElement).checked = false, 200);
   }
-  updateMessage(request:SupportRequestResponse){
+  updateMessage(request: SupportRequestResponse) {
     let messageTextarea = document.getElementById("update-message-textarea") as HTMLTextAreaElement;
-    if(messageTextarea != null){
+    if (messageTextarea != null) {
       let updateUserMessageInput = document.getElementById("update-user-message") as HTMLInputElement;
-      this.supportRequestService.updateMessage(request.id,messageTextarea.value,updateUserMessageInput.checked).subscribe({
-        next:(response)=>{
-          this.toastr.success(updateUserMessageInput.checked ? "Kullanıcı mesajı başarıyla güncellendi":"Destek talebi mesajı güncellendi");
-        },error:(err)=>{
+      this.supportRequestService.updateMessage(request.id, messageTextarea.value, updateUserMessageInput.checked).subscribe({
+        next: (response) => {
+          this.toastr.success(updateUserMessageInput.checked ? "Kullanıcı mesajı başarıyla güncellendi" : "Destek talebi mesajı güncellendi");
+        }, error: (err) => {
           this.toastr.error(err.error?.message ?? "Bir hata oluştu");
         }
       });
