@@ -19,7 +19,8 @@ public class UserService : IUserService
     this.dbContext = _dbContext;
     this.passwordHasher = _passwordHasher;
   }
-  public async Task<IDataResult<List<UserResponseModel>>> ListAsync()
+  public async Task<IDataResult<List<UserResponseModel>>> ListAsync(
+    CancellationToken cancellationToken = default)
   {
     var users = await dbContext.Users.Select(x => new UserResponseModel
     {
@@ -28,9 +29,10 @@ public class UserService : IUserService
       Email = x.Email,
       Firstname = x.Firstname,
       Lastname = x.Lastname,
-      IsAdmin = x.IsAdmin
+      IsAdmin = x.IsAdmin,
+      IsActive = x.IsActive
     })
-    .ToListAsync();
+    .ToListAsync(cancellationToken);
     return new SuccessDataResult<List<UserResponseModel>>("Kullanıcılar listelendi",users);
 
   }
