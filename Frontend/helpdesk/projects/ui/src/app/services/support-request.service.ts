@@ -16,4 +16,25 @@ export class SupportRequestService {
   create(request: CreateSupportRequest): Observable<DataResult<SupportRequestResponse>> {
     return this.http.post<DataResult<SupportRequestResponse>>(`${environment.apiUrl}api/support-requests/create`, request);
   }
+  
+  listForAdmin(): Observable<DataResult<SupportRequestResponse[]>> {
+    return this.http.get<DataResult<SupportRequestResponse[]>>(`${environment.apiUrl}api/support-requests`);
+  }
+  
+  updateStatus(id: string, status: number): Observable<DataResult<SupportRequestResponse>> {
+    return this.http.post<DataResult<SupportRequestResponse>>(
+      `${environment.apiUrl}api/support-requests/${id}/status`,
+      { status }
+    );
+  }
+  
+  assignDepartment(id: string, departmentId: string): Observable<DataResult<SupportRequestResponse>> {
+    return this.http.post<DataResult<SupportRequestResponse>>(
+      `${environment.apiUrl}api/support-requests/${id}/assign-department/${departmentId}`,
+      {}
+    );
+  }
+  updateMessage(id:string,message:string,updateUserMessage:boolean){
+    return this.http.post<DataResult<SupportRequestResponse>>(`${environment.apiUrl}api/support-requests/${id}/message`,{message:message,isUserMessage:updateUserMessage});
+  }
 }
