@@ -22,4 +22,5 @@ public class UserResponseModel
   public string Email { get; set; }
   public string DepartmentId { get; set; }
   public bool IsAdmin { get; set; }
+  public bool IsActive { get; set; }
 }

@@ -34,6 +34,56 @@ public class UserService : IUserService
     return new SuccessDataResult<List<UserResponseModel>>("Kullanıcılar listelendi",users);
 
   }
+
+  public async Task<IDataResult<List<UserResponseModel>>> ListPendingManagersAsync(
+    CancellationToken cancellationToken = default)
+  {
+    var users = await dbContext.Users
+      .Where(user => !user.IsActive && !user.IsAdmin)
+      .OrderBy(user => user.Firstname)
+      .ThenBy(user => user.Lastname)
+      .Select(user => new UserResponseModel
+      {
+        Id = user.Id,
+        DepartmentId = user.DepartmentId,
+        Email = user.Email,
+        Firstname = user.Firstname,
+        Lastname = user.Lastname,
+        IsAdmin = user.IsAdmin,
+        IsActive = user.IsActive
+      })
+      .ToListAsync(cancellationToken);
+
+    return new SuccessDataResult<List<UserResponseModel>>("Onay bekleyen yönetici başvuruları listelendi.", users);
+  }
+
+  public async Task<IDataResult<UserResponseModel>> ApproveManagerAsync(
+    string userId,
+    CancellationToken cancellationToken = default)
+  {
+    if (string.IsNullOrWhiteSpace(userId))
+    {
+      return new ErrorDataResult<UserResponseModel>("Kullanıcı Id zorunludur.");
+    }
+
+    var user = await dbContext.Users.SingleOrDefaultAsync(item => item.Id == userId, cancellationToken);
+    if (user is null)
+    {
+      return new ErrorDataResult<UserResponseModel>("Yönetici başvurusu bulunamadı.");
+    }
+
+    user.IsAdmin = true;
+    user.IsActive = true;
+    await dbContext.SaveChangesAsync(cancellationToken);
+
+    var response = new UserResponseModel(user.Id, user.Firstname, user.Lastname, user.Email, user.DepartmentId, user.IsAdmin)
+    {
+      IsActive = user.IsActive
+    };
+
+    return new SuccessDataResult<UserResponseModel>("Yönetici başvurusu onaylandı.", response);
+  }
+
   public async Task<IDataResult<UserResponseModel>> CreateAsync(
     CreateUserModel model,
     CancellationToken cancellationToken = default)
@@ -74,7 +124,8 @@ public class UserService : IUserService
       Email = email,
       DepartmentId = department.Id,
       Department = department,
-      IsAdmin = false
+      IsAdmin = false,
+      IsActive = true
     };
     user.Password = passwordHasher.HashPassword(user, model.Password);
 
@@ -87,7 +138,10 @@ public class UserService : IUserService
       user.Lastname,
       user.Email,
       user.DepartmentId,
-      user.IsAdmin);
+      user.IsAdmin)
+    {
+      IsActive = user.IsActive
+    };
 
     return new SuccessDataResult<UserResponseModel>("Kullanıcı oluşturuldu.", response);
   }

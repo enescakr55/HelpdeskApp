@@ -6,6 +6,13 @@ namespace Helpdesk.Services.Users;
 
 public interface IUserService
 {
+  Task<IDataResult<List<UserResponseModel>>> ListPendingManagersAsync(
+    CancellationToken cancellationToken = default);
+
+  Task<IDataResult<UserResponseModel>> ApproveManagerAsync(
+    string userId,
+    CancellationToken cancellationToken = default);
+
   Task<IDataResult<UserResponseModel>> CreateAsync(
     CreateUserModel model,
     CancellationToken cancellationToken = default);
