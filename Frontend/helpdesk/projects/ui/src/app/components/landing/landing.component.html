@@ -1,0 +1,80 @@
+<main class="landing-page">
+  <section class="hero" aria-labelledby="hero-title">
+    <header class="site-header">
+      <a class="brand" routerLink="/" aria-label="Destek Merkezi ana sayfa">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span>Destek Merkezi</span>
+      </a>
+      <nav class="site-nav" aria-label="Ana menü">
+        <a class="nav-link" href="#yaklasim">Yaklaşımımız</a>
+        <a class="nav-link manager-link" routerLink="/admin/login">Yönetici girişi</a>
+        <a class="nav-cta" routerLink="/support/request">Destek talebi oluştur <span aria-hidden="true">&#8599;</span></a>
+      </nav>
+    </header>
+
+    <div class="hero-content">
+      <span class="hero-kicker"><span class="kicker-line"></span> PLATFORMUNUZA BAĞLI DESTEK</span>
+      <h1 id="hero-title">Destek<br><em>Merkezi</em></h1>
+      <p>Platformumuzla ilgili sorularınızda ve karşılaştığınız sorunlarda, sizi ürünü tanıyan destek ekibiyle buluşturuyoruz.</p>
+      <div class="hero-actions">
+        <a class="primary-cta" routerLink="/support/request">Destek Talebi Oluştur <span aria-hidden="true">&#8594;</span></a>
+        <a class="text-cta" href="#yaklasim">Yaklaşımımız <span aria-hidden="true">&#8595;</span></a>
+      </div>
+    </div>
+
+    <div class="platform-visual" aria-hidden="true">
+      <div class="visual-heading"><span>PLATFORM DESTEK AKIŞI</span><span>DSK / 01</span></div>
+      <div class="visual-track">
+        <div class="track-row"><span class="track-index">01</span><strong>PLATFORM</strong><span class="track-state">ÜRÜN</span></div>
+        <span class="track-connector"></span>
+        <div class="track-row active-row"><span class="track-index">02</span><strong>DESTEK EKİBİ</strong><span class="track-state">BAĞLI</span></div>
+        <span class="track-connector"></span>
+        <div class="track-row"><span class="track-index">03</span><strong>ÇÖZÜM</strong><span class="track-state">TAKİP</span></div>
+      </div>
+      <div class="visual-footer"><span>AYNI PLATFORM</span><span class="visual-footer-rule"></span><span>AYNI DESTEK AKIŞI</span></div>
+      <span class="visual-mark"><span></span></span>
+    </div>
+
+    <div class="hero-footnote"><span>ÜRÜNÜ TANIYAN EKİP</span><span class="footnote-rule"></span><span>PLATFORMA ÖZEL DESTEK</span></div>
+    <span class="hero-index" aria-hidden="true"></span>
+  </section>
+
+  <section class="approach-section" id="yaklasim" aria-labelledby="approach-title">
+    <div class="approach-heading">
+      <span class="section-kicker">PLATFORMUNUZUN BİR PARÇASI</span>
+      <h2 id="approach-title">Destek, kullandığınız<br>platformun devamı.</h2>
+    </div>
+    <p class="approach-copy">Bağımsız ve genel bir destek hattı değil; platformunuzu ve kullanım bağlamınızı tanıyan ekiple doğrudan iletişim kurduğunuz bir destek noktası.</p>
+    <div class="principles" aria-label="Platform desteğinin özellikleri">
+      <article class="principle">
+        <span class="principle-number">01</span>
+        <h3>Ürün bağlamı</h3>
+        <p>Talebiniz, kullandığınız platformun bilgisiyle değerlendirilir.</p>
+      </article>
+      <article class="principle">
+        <span class="principle-number">02</span>
+        <h3>İlgili ekip</h3>
+        <p>Platforma bağlı destek ekibi konunuzu sahiplenir.</p>
+      </article>
+      <article class="principle">
+        <span class="principle-number">03</span>
+        <h3>Kesintisiz bağ</h3>
+        <p>Destek süreci, platform deneyiminizden ayrı ilerlemez.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="closing-band" aria-labelledby="closing-title">
+    <div>
+      <span class="section-kicker">PLATFORMUNUZLA İLGİLİ BİR SORUN MU VAR?</span>
+      <h2 id="closing-title">Destek ekibiniz burada.</h2>
+    </div>
+    <a class="closing-cta" routerLink="/support/request">Destek talebi oluştur <span aria-hidden="true">&#8594;</span></a>
+  </section>
+
+  <footer class="site-footer">
+    <a class="footer-brand" routerLink="/">Destek Merkezi</a>
+    <span>© 2026 Destek Merkezi</span>
+    <div class="footer-links"><a routerLink="/admin/login">Yönetici girişi</a><a routerLink="/register">Yönetici başvurusu</a></div>
+  </footer>
+</main>

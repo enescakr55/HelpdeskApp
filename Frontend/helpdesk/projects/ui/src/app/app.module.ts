@@ -15,6 +15,7 @@ import { AdminLayoutComponent } from './components/admin-panel/layout/admin-layo
 import { SupportRequestsComponent } from './components/admin-panel/support-requests/support-requests.component';
 import { AdminDepartmentsComponent } from './components/admin-panel/departments/admin-departments.component';
 import { AdminUsersComponent } from './components/admin-panel/users/admin-users.component';
+import { LandingComponent } from './components/landing/landing.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AdminUsersComponent } from './components/admin-panel/users/admin-users.
     AdminLayoutComponent,
     SupportRequestsComponent,
     AdminDepartmentsComponent,
-    AdminUsersComponent
+    AdminUsersComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule,
