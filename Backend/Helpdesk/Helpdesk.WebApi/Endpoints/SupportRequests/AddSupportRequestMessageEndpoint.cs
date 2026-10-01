@@ -18,7 +18,7 @@ public class AddSupportRequestMessageEndpoint : Endpoint<AddSupportRequestMessag
   public override void Configure()
   {
     Post("api/support-requests/{id}/message");
-    Roles("User", "Admin");
+    Roles("Admin");
   }
 
   public override async Task HandleAsync(AddSupportRequestMessageModel req, CancellationToken ct)

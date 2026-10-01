@@ -17,7 +17,7 @@ public class GetUserSupportRequestsEndpoint : EndpointWithoutRequest<IDataResult
   public override void Configure()
   {
     Get("api/support-requests/user/{email}");
-    Roles("User", "Admin");
+    Roles("Admin");
   }
 
   public override async Task HandleAsync(CancellationToken ct)
