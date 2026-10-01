@@ -128,13 +128,18 @@ public class AuthService : IAuthService
       return new ErrorDataResult<AuthResponseModel>("E-posta veya parola hatalı.");
     }
 
+    if (!user.IsActive)
+    {
+      return new ErrorDataResult<AuthResponseModel>("Hesabınız henüz yönetici tarafından onaylanmadı.");
+    }
+
     var response = CreateAuthResponse(user);
     return new SuccessDataResult<AuthResponseModel>("Giriş başarılı.", response);
   }
 
   private AuthResponseModel CreateAuthResponse(User user)
   {
-    var token = GenerateJwtToken(user);
+    var token = user.IsActive ? GenerateJwtToken(user) : string.Empty;
     return new AuthResponseModel
     {
       Token = token,
@@ -143,7 +148,8 @@ public class AuthService : IAuthService
       Firstname = user.Firstname,
       Lastname = user.Lastname,
       IsAdmin = user.IsAdmin,
-      Expiration = DateTime.UtcNow.AddHours(8)
+      IsActive = user.IsActive,
+      Expiration = user.IsActive ? DateTime.UtcNow.AddHours(8) : DateTime.MinValue
     };
   }
 
