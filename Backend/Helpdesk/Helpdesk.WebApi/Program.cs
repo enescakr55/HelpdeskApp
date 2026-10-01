@@ -27,11 +27,11 @@ namespace Helpdesk.WebApi
         .Build();
       var Configuration = builder.Configuration;
       // Add services to the container.
-      var secret = Configuration.GetRequiredSection("Secret");
+      var secret = Configuration.GetSection("Secret").Value ?? builder.Configuration["Jwt:Secret"];
       if(secret == null){
         throw new Exception("Secret key cannot be null");
       }
-      var key = Encoding.ASCII.GetBytes(secret.Value!.ToString());
+      var key = Encoding.ASCII.GetBytes(secret.ToString());
       builder.Services.AddAuthentication(x =>
       {
         x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,7 +69,7 @@ namespace Helpdesk.WebApi
       builder.Services.AddScoped<IDepartmentService, DepartmentService>();
       builder.Services.AddScoped<ISupportRequestService, SupportRequestService>();
       builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-      var connectionString = Configuration.GetConnectionString("Default")
+      var connectionString = Configuration.GetConnectionString("Default") ?? builder.Configuration["ConnectionStrings:Default"]
         ?? throw new InvalidOperationException("Connection string 'Default' was not found.");
       builder.Services.AddDbContext<PostgresDbContext>(options =>
         options.UseNpgsql(connectionString));
@@ -90,7 +90,10 @@ namespace Helpdesk.WebApi
         var departmentService = scope.ServiceProvider.GetRequiredService<IDepartmentService>();
         var departments = departmentService.ListAsync().GetAwaiter().GetResult();
         if(departments.Success && departments.Data.Count() == 0){
-          var initialName = configuration.GetRequiredSection("General:InitialDepartmentName").Value!.ToString();
+          var initialName = configuration.GetSection("General:InitialDepartmentName").Value ?? builder.Configuration["General:InitialDepartmentName"];
+          if(initialName == null){
+            throw new Exception("Initial Department Name is required");
+          }
           departmentService.CreateAsync(new Services.RequestModels.CreateDepartmentModel
           {
             DepartmentName = initialName
