@@ -5,26 +5,25 @@ using Helpdesk.Services.SupportRequests;
 
 namespace Helpdesk.WebApi.Endpoints.SupportRequests;
 
-public class AssignSupportRequestDepartmentEndpoint : EndpointWithoutRequest<IDataResult<SupportRequestResponseModel>>
+public class GetSupportRequestByCodeEndpoint : EndpointWithoutRequest<IDataResult<SupportRequestResponseModel>>
 {
   private readonly ISupportRequestService _supportRequestService;
 
-  public AssignSupportRequestDepartmentEndpoint(ISupportRequestService supportRequestService)
+  public GetSupportRequestByCodeEndpoint(ISupportRequestService supportRequestService)
   {
     _supportRequestService = supportRequestService;
   }
 
   public override void Configure()
   {
-    Post("api/support-requests/{id}/assign-department/{departmentId}");
-    Roles("Admin");
+    Get("api/support-requests/code/{requestCode}");
+    Roles("User", "Admin");
   }
 
   public override async Task HandleAsync(CancellationToken ct)
   {
-    var id = Route<string>("id");
-    var departmentId = Route<string>("departmentId");
-    var result = await _supportRequestService.AssignDepartmentAsync(id, departmentId, ct);
+    var requestCode = Route<string>("requestCode");
+    var result = await _supportRequestService.GetByRequestCodeAsync(requestCode, ct);
     await Send.ResponseAsync(result, 200, ct);
   }
 }

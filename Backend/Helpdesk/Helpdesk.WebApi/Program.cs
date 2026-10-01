@@ -69,6 +69,23 @@ namespace Helpdesk.WebApi
       builder.Services.AddSingleton<IConfiguration>(Configuration);
       var app = builder.Build();
 
+      using (var scope = app.Services.CreateScope())
+      {
+        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<PostgresDbContext>();
+        dbContext.Database.Migrate();
+
+        var departmentService = scope.ServiceProvider.GetRequiredService<IDepartmentService>();
+        var departments = departmentService.ListAsync().GetAwaiter().GetResult();
+        if(departments.Success && departments.Data.Count() == 0){
+          var initialName = configuration.GetRequiredSection("General:InitialDepartmentName").Value!.ToString();
+          departmentService.CreateAsync(new Services.RequestModels.CreateDepartmentModel
+          {
+            DepartmentName = initialName
+          }).GetAwaiter().GetResult();
+        }
+      }
+
       // Configure the HTTP request pipeline.
       if (app.Environment.IsDevelopment())
       {
@@ -80,25 +97,6 @@ namespace Helpdesk.WebApi
       app.UseAuthentication();
       app.UseAuthorization();
       app.UseFastEndpoints();
-      var summaries = new[]
-      {
-                "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-            };
-
-      app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-      {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                  new WeatherForecast
-                  {
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = summaries[Random.Shared.Next(summaries.Length)]
-                  })
-                  .ToArray();
-        return forecast;
-      })
-      .WithName("GetWeatherForecast")
-      .WithOpenApi();
 
       app.Run();
     }

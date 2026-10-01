@@ -18,7 +18,7 @@ public class CreateSupportRequestEndpoint : Endpoint<CreateSupportRequestModel, 
   public override void Configure()
   {
     Post("api/support-requests");
-    Roles("User", "Admin");
+    AllowAnonymous();
   }
 
   public override async Task HandleAsync(CreateSupportRequestModel req, CancellationToken ct)

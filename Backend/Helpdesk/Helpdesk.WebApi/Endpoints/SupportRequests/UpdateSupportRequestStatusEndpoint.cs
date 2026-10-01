@@ -17,7 +17,7 @@ public class UpdateSupportRequestStatusEndpoint : Endpoint<UpdateSupportRequestS
 
   public override void Configure()
   {
-    Put("api/support-requests/{id}/status");
+    Post("api/support-requests/{id}/status");
     Roles("Admin");
   }
 

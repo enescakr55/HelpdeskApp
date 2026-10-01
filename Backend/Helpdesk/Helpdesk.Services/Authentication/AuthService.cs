@@ -88,13 +88,6 @@ public class AuthService : IAuthService
     var totalUserCount = dbContext.Users.Count();
     if (totalUserCount == 0)
     {
-      var departments = _departmentService.ListAsync().GetAwaiter().GetResult();
-      if (departments.Data.Count() == 0)
-      {
-        var createdDepartment =_departmentService.CreateAsync(new CreateDepartmentModel { DepartmentName = "Genel" }).GetAwaiter().GetResult();
-        departments.Data.Add(createdDepartment.Data);
-      }
-      user.DepartmentId = departments.Data.First().Id;
       user.IsActive = true;
       user.IsAdmin = true;
     }

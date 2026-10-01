@@ -7,6 +7,7 @@ namespace Helpdesk.Services.SupportRequests;
 public interface ISupportRequestService
 {
   Task<IDataResult<SupportRequestResponseModel>> CreateAsync(CreateSupportRequestModel model, CancellationToken cancellationToken = default);
+  Task<IDataResult<SupportRequestResponseModel>> GetByRequestCodeAsync(string requestCode, CancellationToken cancellationToken = default);
   Task<IDataResult<List<SupportRequestResponseModel>>> GetByUserAsync(string email, CancellationToken cancellationToken = default);
   Task<IDataResult<List<SupportRequestResponseModel>>> GetAllForAdminAsync(CancellationToken cancellationToken = default);
   Task<IDataResult<SupportRequestResponseModel>> UpdateStatusAsync(string id, UpdateSupportRequestStatusModel model, CancellationToken cancellationToken = default);

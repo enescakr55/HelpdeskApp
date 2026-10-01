@@ -17,7 +17,7 @@ public class UpdateDepartmentEndpoint : Endpoint<UpdateDepartmentModel, IDataRes
 
   public override void Configure()
   {
-    Put("api/departments/{id}");
+    Post("api/departments/update/{id}");
     Roles("Admin");
   }
 

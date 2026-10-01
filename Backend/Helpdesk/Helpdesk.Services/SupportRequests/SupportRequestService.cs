@@ -51,10 +51,12 @@ public class SupportRequestService : ISupportRequestService
       return new ErrorDataResult<SupportRequestResponseModel>("Talep açıklaması zorunludur.");
     }
 
+    var requestCode = await GenerateUniqueRequestCodeAsync(cancellationToken);
+
     var request = new SupportRequest
     {
       Id = Guid.NewGuid().ToString(),
-      RequestCode = GenerateRequestCode(),
+      RequestCode = requestCode,
       Fullname = fullname,
       Email = email.ToLowerInvariant(),
       Subject = model.Subject,
@@ -68,6 +70,26 @@ public class SupportRequestService : ISupportRequestService
     await dbContext.SaveChangesAsync(cancellationToken);
 
     return new SuccessDataResult<SupportRequestResponseModel>("Destek talebi oluşturuldu.", MapToResponse(request));
+  }
+
+  public async Task<IDataResult<SupportRequestResponseModel>> GetByRequestCodeAsync(string requestCode, CancellationToken cancellationToken = default)
+  {
+    if (string.IsNullOrWhiteSpace(requestCode))
+    {
+      return new ErrorDataResult<SupportRequestResponseModel>("Talep kodu zorunludur.");
+    }
+
+    var request = await dbContext.SupportRequests
+      .AsNoTracking()
+      .Include(x => x.AssignedDepartment)
+      .SingleOrDefaultAsync(x => x.RequestCode == requestCode.Trim(), cancellationToken);
+
+    if (request is null)
+    {
+      return new ErrorDataResult<SupportRequestResponseModel>("Bu talep koduna ait kayıt bulunamadı.");
+    }
+
+    return new SuccessDataResult<SupportRequestResponseModel>("Talep bulundu.", MapToResponse(request));
   }
 
   public async Task<IDataResult<List<SupportRequestResponseModel>>> GetByUserAsync(string email, CancellationToken cancellationToken = default)
@@ -238,9 +260,20 @@ public class SupportRequestService : ISupportRequestService
     return new SuccessDataResult<SupportRequestResponseModel>("Talep departmana atandı.", MapToResponse(request));
   }
 
-  private static string GenerateRequestCode()
+  private async Task<string> GenerateUniqueRequestCodeAsync(CancellationToken cancellationToken)
   {
-    return $"SR-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid().ToString("N")[..6].ToUpper()}";
+    var code = string.Empty;
+
+    while (true)
+    {
+      code = $"SR-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid().ToString("N")[..6].ToUpper()}";
+
+      var exists = await dbContext.SupportRequests.AnyAsync(x => x.RequestCode == code, cancellationToken);
+      if (!exists)
+      {
+        return code;
+      }
+    }
   }
 
   private static SupportRequestResponseModel MapToResponse(SupportRequest request)
