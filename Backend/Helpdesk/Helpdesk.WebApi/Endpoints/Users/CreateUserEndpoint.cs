@@ -21,7 +21,7 @@ namespace Helpdesk.WebApi.Endpoints.Users
     public override async Task HandleAsync(CreateUserModel req, CancellationToken ct)
     {
       var result = await _userService.CreateAsync(req); 
-      await Send.ResponseAsync(result,200);
+      await Send.ResponseAsync(result, result.Success ? 200 : 400);
     }
   }
 }

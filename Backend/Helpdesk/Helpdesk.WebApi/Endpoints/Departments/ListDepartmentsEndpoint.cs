@@ -23,6 +23,6 @@ public class ListDepartmentsEndpoint : EndpointWithoutRequest<IDataResult<List<D
   public override async Task HandleAsync(CancellationToken ct)
   {
     var result = await _departmentService.ListAsync(ct);
-    await Send.ResponseAsync(result, 200, ct);
+    await Send.ResponseAsync(result, result.Success ? 200 : 400, ct);
   }
 }

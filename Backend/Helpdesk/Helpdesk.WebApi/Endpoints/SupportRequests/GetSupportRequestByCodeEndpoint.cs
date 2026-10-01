@@ -24,6 +24,6 @@ public class GetSupportRequestByCodeEndpoint : EndpointWithoutRequest<IDataResul
   {
     var requestCode = Route<string>("requestCode");
     var result = await _supportRequestService.GetByRequestCodeAsync(requestCode, ct);
-    await Send.ResponseAsync(result, 200, ct);
+    await Send.ResponseAsync(result, result.Success ? 200 : 400, ct);
   }
 }

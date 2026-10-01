@@ -24,6 +24,6 @@ public class RegisterEndpoint : Endpoint<RegisterModel, IDataResult<AuthResponse
   public override async Task HandleAsync(RegisterModel req, CancellationToken ct)
   {
     var result = await _authService.RegisterAsync(req, ct);
-    await Send.ResponseAsync(result, 200, ct);
+    await Send.ResponseAsync(result, result.Success ? 200 : 400, ct);
   }
 }

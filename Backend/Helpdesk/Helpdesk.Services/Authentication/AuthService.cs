@@ -142,7 +142,8 @@ public class AuthService : IAuthService
       Email = user.Email,
       Firstname = user.Firstname,
       Lastname = user.Lastname,
-      IsAdmin = user.IsAdmin
+      IsAdmin = user.IsAdmin,
+      Expiration = DateTime.UtcNow.AddHours(8)
     };
   }
 

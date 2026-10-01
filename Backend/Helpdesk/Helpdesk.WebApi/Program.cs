@@ -49,6 +49,18 @@ namespace Helpdesk.WebApi
         };
 
       });
+      builder.Services.AddCors(options =>
+      {
+        options.AddPolicy(name: "AllowedCorsOrigins",
+            builder =>
+            {
+              builder
+                            .SetIsOriginAllowed(origin => true)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+            });
+      });
       builder.Services.AddAuthorization();
       builder.Services.AddFastEndpoints();
       
@@ -92,7 +104,7 @@ namespace Helpdesk.WebApi
         app.UseSwagger();
         app.UseSwaggerUI();
       }
-
+      app.UseCors("AllowedCorsOrigins");
       app.UseHttpsRedirection();
       app.UseAuthentication();
       app.UseAuthorization();

@@ -24,6 +24,6 @@ public class GetUserSupportRequestsEndpoint : EndpointWithoutRequest<IDataResult
   {
     var email = Route<string>("email");
     var result = await _supportRequestService.GetByUserAsync(email, ct);
-    await Send.ResponseAsync(result, 200, ct);
+    await Send.ResponseAsync(result, result.Success ? 200 : 400, ct);
   }
 }

@@ -24,6 +24,6 @@ public class CreateDepartmentEndpoint : Endpoint<CreateDepartmentModel, IDataRes
   public override async Task HandleAsync(CreateDepartmentModel req, CancellationToken ct)
   {
     var result = await _departmentService.CreateAsync(req, ct);
-    await Send.ResponseAsync(result, 200, ct);
+    await Send.ResponseAsync(result, result.Success ? 200 : 400, ct);
   }
 }

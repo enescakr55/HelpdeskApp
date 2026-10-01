@@ -25,6 +25,6 @@ public class AssignSupportRequestDepartmentEndpoint : EndpointWithoutRequest<IDa
     var id = Route<string>("id");
     var departmentId = Route<string>("departmentId");
     var result = await _supportRequestService.AssignDepartmentAsync(id, departmentId, ct);
-    await Send.ResponseAsync(result, 200, ct);
+    await Send.ResponseAsync(result, result.Success ? 200 : 400, ct);
   }
 }

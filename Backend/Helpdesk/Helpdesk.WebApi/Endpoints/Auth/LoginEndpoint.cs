@@ -24,6 +24,6 @@ public class LoginEndpoint : Endpoint<LoginModel, IDataResult<AuthResponseModel>
   public override async Task HandleAsync(LoginModel req, CancellationToken ct)
   {
     var result = await _authService.LoginAsync(req, ct);
-    await Send.ResponseAsync(result, 200, ct);
+    await Send.ResponseAsync(result, result.Success ? 200 : 400, ct);
   }
 }

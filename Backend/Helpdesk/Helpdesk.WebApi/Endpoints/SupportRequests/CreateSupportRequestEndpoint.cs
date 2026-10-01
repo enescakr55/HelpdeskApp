@@ -24,6 +24,6 @@ public class CreateSupportRequestEndpoint : Endpoint<CreateSupportRequestModel, 
   public override async Task HandleAsync(CreateSupportRequestModel req, CancellationToken ct)
   {
     var result = await _supportRequestService.CreateAsync(req, ct);
-    await Send.ResponseAsync(result, 200, ct);
+    await Send.ResponseAsync(result, result.Success ? 200 : 400, ct);
   }
 }

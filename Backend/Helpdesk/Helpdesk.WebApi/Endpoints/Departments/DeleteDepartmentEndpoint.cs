@@ -23,6 +23,6 @@ public class DeleteDepartmentEndpoint : EndpointWithoutRequest<IDataResult<bool>
   {
     var id = Route<string>("id");
     var result = await _departmentService.DeleteAsync(id, ct);
-    await Send.ResponseAsync(result, 200, ct);
+    await Send.ResponseAsync(result, result.Success ? 200 : 400, ct);
   }
 }

@@ -23,6 +23,6 @@ public class GetAdminSupportRequestsEndpoint : EndpointWithoutRequest<IDataResul
   public override async Task HandleAsync(CancellationToken ct)
   {
     var result = await _supportRequestService.GetAllForAdminAsync(ct);
-    await Send.ResponseAsync(result, 200, ct);
+    await Send.ResponseAsync(result, result.Success ? 200 : 400, ct);
   }
 }
