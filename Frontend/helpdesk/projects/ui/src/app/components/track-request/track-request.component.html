@@ -1,0 +1,106 @@
+<main class="support-page">
+  <div class="support-shell container">
+    <header class="support-header">
+      <a class="brand" routerLink="/" aria-label="Destek Merkezi ana sayfa">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span>Destek Merkezi</span>
+      </a>
+      <div class="header-actions">
+        <a class="tracking-nav-link" routerLink="/support/request">Yeni talep</a>
+        <a class="admin-login-link" routerLink="/admin/login">Yönetici girişi</a>
+      </div>
+    </header>
+
+    <section class="support-content" aria-labelledby="page-title">
+      <div class="intro">
+        <span class="eyebrow"><span class="status-dot"></span> TALEP TAKİBİ</span>
+        <h1 id="page-title">Talebiniz ne durumda?</h1>
+        <p class="intro-copy">Destek talebinizi oluştururken aldığınız talep kodunu girerek güncel durumu ve ekibimizin mesajını görüntüleyin.</p>
+
+        <aside class="help-card">
+          <div class="help-icon" aria-hidden="true">i</div>
+          <div>
+            <h2>Talep kodunuzu kullanın</h2>
+            <p>Bu kod, talebinize özel erişim anahtarıdır. Kodunuzu yalnızca güvendiğiniz kişilerle paylaşın.</p>
+          </div>
+        </aside>
+
+        <div class="privacy-note">
+          <span aria-hidden="true">&#9679;</span>
+          <p>Sonuçlar, kullandığınız platforma bağlı destek ekibi tarafından güncellenir.</p>
+        </div>
+      </div>
+
+      <div class="tracking-column">
+        <section class="form-card tracking-card" aria-label="Destek talebi sorgulama">
+          <div class="form-heading">
+            <div><h2>Talep koduyla sorgula</h2><p>Kodunuzu girdiğinizde son durumu burada görebilirsiniz.</p></div>
+          </div>
+
+          <form [formGroup]="trackingForm" (ngSubmit)="findRequest()" novalidate>
+            <label for="requestCode" class="form-label">Talep kodu <span>*</span></label>
+            <div class="tracking-controls">
+              <input
+                id="requestCode"
+                type="text"
+                class="form-control request-code-input"
+                formControlName="requestCode"
+                placeholder="SR-20261001123000-A1B2C3D4E5F67890"
+                autocomplete="off"
+                autocapitalize="characters"
+                spellcheck="false"
+                [class.is-invalid]="trackingForm.controls['requestCode'].invalid && (trackingForm.controls['requestCode'].touched || attemptedSubmit)"
+                aria-describedby="request-code-error"
+              >
+              <button class="btn submit-button" type="submit" [disabled]="isLoading">
+                {{ isLoading ? 'Sorgulanıyor...' : 'Sorgula' }} <span aria-hidden="true">&#8594;</span>
+              </button>
+            </div>
+            <div class="invalid-feedback" id="request-code-error" *ngIf="trackingForm.controls['requestCode'].invalid && (trackingForm.controls['requestCode'].touched || attemptedSubmit)">Talep kodunuzu girin.</div>
+          </form>
+
+          <div class="alert alert-danger tracking-notice mb-0" role="alert" *ngIf="statusMessage">{{ statusMessage }}</div>
+        </section>
+
+        <section class="request-result" *ngIf="request as currentRequest" aria-live="polite" aria-labelledby="result-title">
+          <div class="result-heading">
+            <div><span class="result-kicker">{{ currentRequest.requestCode }}</span><h2 id="result-title">{{ currentRequest.title }}</h2></div>
+            <span class="request-status" [class]="'request-status ' + statusClass(currentRequest.status)">{{ statusLabel(currentRequest.status) }}</span>
+          </div>
+
+          <div class="status-progress" aria-label="Talep durumu">
+            <span [class.progress-reached]="currentRequest.status >= 0"></span>
+            <span [class.progress-reached]="currentRequest.status >= 1"></span>
+            <span [class.progress-reached]="currentRequest.status >= 2"></span>
+            <span [class.progress-reached]="currentRequest.status >= 3"></span>
+          </div>
+
+          <div class="result-meta">
+            <div><span>Başlık</span><strong>{{ currentRequest.title }}</strong></div>
+            <div><span>Öncelik</span><strong>{{ priorityLabel(currentRequest.priority) }}</strong></div>
+          </div>
+
+          <div class="request-description">
+            <span class="message-label">TALEP AÇIKLAMASI</span>
+            <p>{{ currentRequest.description }}</p>
+          </div>
+
+          <div class="request-message user-message" *ngIf="currentRequest.userMessage">
+            <span class="message-label">TALEBİNİZE EKLENEN MESAJ</span>
+            <p>{{ currentRequest.userMessage }}</p>
+          </div>
+
+          <div class="no-message" *ngIf="!currentRequest.userMessage">
+            <span class="message-indicator" aria-hidden="true"></span>
+            <p>Destek ekibinden henüz yeni bir mesaj yok.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="support-footer">
+      <a routerLink="/support/request">Yeni bir destek talebi oluştur</a>
+      <span>© 2026 Destek Merkezi</span>
+    </footer>
+  </div>
+</main>

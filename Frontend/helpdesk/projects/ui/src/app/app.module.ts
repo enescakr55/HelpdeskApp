@@ -16,6 +16,7 @@ import { SupportRequestsComponent } from './components/admin-panel/support-reque
 import { AdminDepartmentsComponent } from './components/admin-panel/departments/admin-departments.component';
 import { AdminUsersComponent } from './components/admin-panel/users/admin-users.component';
 import { LandingComponent } from './components/landing/landing.component';
+import { TrackRequestComponent } from './components/track-request/track-request.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { LandingComponent } from './components/landing/landing.component';
     SupportRequestsComponent,
     AdminDepartmentsComponent,
     AdminUsersComponent,
-    LandingComponent
+    LandingComponent,
+    TrackRequestComponent
   ],
   imports: [
     BrowserModule,

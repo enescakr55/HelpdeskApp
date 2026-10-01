@@ -368,3 +368,13 @@
     width: 100%;
   }
 }
+
+.tracking-nav-link {
+  color: #5368d5;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.tracking-nav-link:hover { color: #354a99; text-decoration: underline; }

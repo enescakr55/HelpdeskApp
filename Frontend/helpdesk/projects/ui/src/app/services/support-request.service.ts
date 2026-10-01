@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { DataResult } from '../models/responses/data-result';
 import { CreateSupportRequest } from '../models/requests/createSupportRequest';
 import { SupportRequestResponse } from '../models/requests/supportRequestResponse';
+import { SupportRequestTrackResponseModel } from '../models/responses/supportRequestTrackResponseModel';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,12 @@ export class SupportRequestService {
 
   create(request: CreateSupportRequest): Observable<DataResult<SupportRequestResponse>> {
     return this.http.post<DataResult<SupportRequestResponse>>(`${environment.apiUrl}api/support-requests/create`, request);
+  }
+
+  getByRequestCode(requestCode: string): Observable<DataResult<SupportRequestTrackResponseModel>> {
+    return this.http.get<DataResult<SupportRequestTrackResponseModel>>(
+      `${environment.apiUrl}api/support-requests/code/${encodeURIComponent(requestCode)}`
+    );
   }
   
   listForAdmin(): Observable<DataResult<SupportRequestResponse[]>> {

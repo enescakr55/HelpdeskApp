@@ -56,20 +56,22 @@ export class GetSupportComponent {
       title: this.supportForm.controls['title'].value,
       description: this.supportForm.controls['description'].value
     };
-
+    this.submitted = false;
     this.isSubmitting = true;
     this.statusMessage = '';
 
     this.supportRequestService.create(payload).subscribe({
       next: (response) => {
+        console.log(response);
         this.isSubmitting = false;
         this.submitted = true;
-        const requestCode = response?.data?.requestCode;
-        this.statusMessage = requestCode
+        let requestCode = response?.data?.requestCode
+        this.statusMessage = requestCode != null
           ? `Talebiniz başarıyla oluşturuldu. Talep kodunuz: ${requestCode}`
           : response?.message || 'Talebiniz başarıyla oluşturuldu.';
         this.supportForm.reset({
-          priority: 'normal'
+          priority: 'normal',
+          description: ' '
         });
         this.attemptedSubmit = false;
       },
