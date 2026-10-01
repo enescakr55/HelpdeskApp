@@ -5,7 +5,7 @@ using Helpdesk.Services.SupportRequests;
 
 namespace Helpdesk.WebApi.Endpoints.SupportRequests;
 
-public class GetSupportRequestByCodeEndpoint : EndpointWithoutRequest<IDataResult<SupportRequestResponseModel>>
+public class GetSupportRequestByCodeEndpoint : EndpointWithoutRequest<IDataResult<SupportRequestTrackResponseModel>>
 {
   private readonly ISupportRequestService _supportRequestService;
 
@@ -17,7 +17,7 @@ public class GetSupportRequestByCodeEndpoint : EndpointWithoutRequest<IDataResul
   public override void Configure()
   {
     Get("api/support-requests/code/{requestCode}");
-    Roles("User", "Admin");
+    AllowAnonymous();
   }
 
   public override async Task HandleAsync(CancellationToken ct)

@@ -72,24 +72,34 @@ public class SupportRequestService : ISupportRequestService
     return new SuccessDataResult<SupportRequestResponseModel>("Destek talebi oluşturuldu.", MapToResponse(request));
   }
 
-  public async Task<IDataResult<SupportRequestResponseModel>> GetByRequestCodeAsync(string requestCode, CancellationToken cancellationToken = default)
+  public async Task<IDataResult<SupportRequestTrackResponseModel>> GetByRequestCodeAsync(string requestCode, CancellationToken cancellationToken = default)
   {
     if (string.IsNullOrWhiteSpace(requestCode))
     {
-      return new ErrorDataResult<SupportRequestResponseModel>("Talep kodu zorunludur.");
+      return new ErrorDataResult<SupportRequestTrackResponseModel>("Talep kodu zorunludur.");
     }
 
     var request = await dbContext.SupportRequests
       .AsNoTracking()
-      .Include(x => x.AssignedDepartment)
       .SingleOrDefaultAsync(x => x.RequestCode == requestCode.Trim(), cancellationToken);
 
     if (request is null)
     {
-      return new ErrorDataResult<SupportRequestResponseModel>("Bu talep koduna ait kayıt bulunamadı.");
+      return new ErrorDataResult<SupportRequestTrackResponseModel>("Bu talep koduna ait kayıt bulunamadı.");
     }
 
-    return new SuccessDataResult<SupportRequestResponseModel>("Talep bulundu.", MapToResponse(request));
+    var response = new SupportRequestTrackResponseModel
+    {
+      RequestCode = request.RequestCode,
+      Subject = request.Subject,
+      Priority = request.Priority,
+      Title = request.Title,
+      Description = request.Description,
+      Status = request.Status,
+      UserMessage = request.UserMessage
+    };
+
+    return new SuccessDataResult<SupportRequestTrackResponseModel>("Talep bulundu.", response);
   }
 
   public async Task<IDataResult<List<SupportRequestResponseModel>>> GetByUserAsync(string email, CancellationToken cancellationToken = default)
@@ -266,7 +276,7 @@ public class SupportRequestService : ISupportRequestService
 
     while (true)
     {
-      code = $"SR-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid().ToString("N")[..6].ToUpper()}";
+      code = $"SR-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid().ToString("N")[..16].ToUpper()}";
 
       var exists = await dbContext.SupportRequests.AnyAsync(x => x.RequestCode == code, cancellationToken);
       if (!exists)
