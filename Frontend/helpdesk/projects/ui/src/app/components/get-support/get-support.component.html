@@ -5,7 +5,10 @@
         <span class="brand-mark" aria-hidden="true">D</span>
         <span>Destek Merkezi</span>
       </a>
-      <span class="header-caption">Size yardımcı olmak için buradayız</span>
+      <div class="header-actions">
+        <span class="header-caption">Size yardımcı olmak için buradayız</span>
+        <a class="admin-login-link" routerLink="/admin/login">Yönetici girişi</a>
+      </div>
     </header>
 
     <section class="support-content" aria-labelledby="page-title">
@@ -51,7 +54,7 @@
                 formControlName="fullName"
                 placeholder="Adınızı ve soyadınızı girin"
                 autocomplete="name"
-                [class.is-invalid]="supportForm.controls.fullName.invalid && (supportForm.controls.fullName.touched || attemptedSubmit)"
+                [class.is-invalid]="supportForm.controls['fullName'].invalid && (supportForm.controls['fullName'].touched || attemptedSubmit)"
               >
               <div class="invalid-feedback">Lütfen adınızı ve soyadınızı girin.</div>
             </div>
@@ -65,28 +68,11 @@
                 formControlName="email"
                 placeholder="ornek@eposta.com"
                 autocomplete="email"
-                [class.is-invalid]="supportForm.controls.email.invalid && (supportForm.controls.email.touched || attemptedSubmit)"
+                [class.is-invalid]="supportForm.controls['email'].invalid && (supportForm.controls['email'].touched || attemptedSubmit)"
               >
               <div class="invalid-feedback">
-                {{ supportForm.controls.email.hasError('required') ? 'E-posta adresinizi girin.' : 'Geçerli bir e-posta adresi girin.' }}
+                {{ supportForm.controls['email'].hasError('required') ? 'E-posta adresinizi girin.' : 'Geçerli bir e-posta adresi girin.' }}
               </div>
-            </div>
-
-            <div class="col-md-6">
-              <label for="category" class="form-label">Konu <span>*</span></label>
-              <select
-                id="category"
-                class="form-select"
-                formControlName="category"
-                [class.is-invalid]="supportForm.controls.category.invalid && (supportForm.controls.category.touched || attemptedSubmit)"
-              >
-                <option value="" disabled>Konu seçin</option>
-                <option value="account">Hesap ve giriş</option>
-                <option value="technical">Teknik sorun</option>
-                <option value="billing">Ödeme ve faturalandırma</option>
-                <option value="other">Diğer</option>
-              </select>
-              <div class="invalid-feedback">Lütfen bir konu seçin.</div>
             </div>
 
             <div class="col-md-6">
@@ -99,35 +85,35 @@
             </div>
 
             <div class="col-12">
-              <label for="subject" class="form-label">Talep başlığı <span>*</span></label>
+              <label for="title" class="form-label">Talep başlığı <span>*</span></label>
               <input
-                id="subject"
+                id="title"
                 type="text"
                 class="form-control"
-                formControlName="subject"
+                formControlName="title"
                 placeholder="Sorununuzu kısaca özetleyin"
-                [class.is-invalid]="supportForm.controls.subject.invalid && (supportForm.controls.subject.touched || attemptedSubmit)"
+                [class.is-invalid]="supportForm.controls['title'].invalid && (supportForm.controls['title'].touched || attemptedSubmit)"
               >
               <div class="invalid-feedback">Lütfen talebiniz için bir başlık yazın.</div>
             </div>
 
             <div class="col-12">
-              <label for="message" class="form-label">Açıklama <span>*</span></label>
+              <label for="description" class="form-label">Açıklama <span>*</span></label>
               <textarea
-                id="message"
+                id="description"
                 class="form-control message-input"
-                formControlName="message"
+                formControlName="description"
                 rows="5"
                 placeholder="Sorunu ne zaman fark ettiğinizi ve neler denediğinizi anlatın..."
-                [class.is-invalid]="supportForm.controls.message.invalid && (supportForm.controls.message.touched || attemptedSubmit)"
+                [class.is-invalid]="supportForm.controls['description'].invalid && (supportForm.controls['description'].touched || attemptedSubmit)"
               ></textarea>
               <div class="field-hint">
                 <span
                   class="text-danger"
-                  *ngIf="supportForm.controls.message.hasError('minlength') && (supportForm.controls.message.touched || attemptedSubmit)"
+                  *ngIf="supportForm.controls['description'].hasError('minlength') && (supportForm.controls['description'].touched || attemptedSubmit)"
                 >En az 20 karakter yazın.</span>
-                <span *ngIf="!supportForm.controls.message.hasError('minlength')">En az 20 karakter</span>
-                <span>{{ supportForm.controls.message.value.length }} karakter</span>
+                <span *ngIf="!supportForm.controls['description'].hasError('minlength')">En az 20 karakter</span>
+                <span>{{ supportForm.controls['description'].value.length }} karakter</span>
               </div>
             </div>
           </div>
@@ -139,8 +125,12 @@
             </button>
           </div>
 
-          <div class="alert alert-info submit-notice mb-0" role="status" *ngIf="submitted">
-            Formunuz kontrol edildi. Destek ekibine iletilmesi için sunucu tarafındaki gönderim servisinin bağlanması gerekiyor.
+          <div class="alert alert-info submit-notice mb-0" role="status" *ngIf="submitted || statusMessage">
+            {{ statusMessage || 'Talebiniz gönderildi. Destek ekibimiz en kısa sürede dönüş yapacaktır.' }}
+          </div>
+
+          <div class="alert alert-danger submit-notice mb-0" role="alert" *ngIf="!submitted && statusMessage && statusMessage.includes('hata')">
+            {{ statusMessage }}
           </div>
         </form>
       </section>

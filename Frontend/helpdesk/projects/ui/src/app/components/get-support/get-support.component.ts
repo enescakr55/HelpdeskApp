@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SupportRequestService } from '../../services/support-request.service';
 
 @Component({
   selector: 'app-get-support',
@@ -8,19 +9,30 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrl: './get-support.component.scss'
 })
 export class GetSupportComponent {
-  private readonly formBuilder = inject(FormBuilder);
+  private readonly formBuilder: FormBuilder;
+  private readonly supportRequestService: SupportRequestService;
 
-  readonly supportForm = this.formBuilder.nonNullable.group({
-    fullName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    category: ['', Validators.required],
-    priority: ['normal', Validators.required],
-    subject: ['', Validators.required],
-    message: ['', [Validators.required, Validators.minLength(20)]]
-  });
-
+  supportForm: FormGroup;
   submitted = false;
   attemptedSubmit = false;
+  isSubmitting = false;
+  statusMessage = '';
+
+  constructor(
+    formBuilder: FormBuilder,
+    supportRequestService: SupportRequestService
+  ) {
+    this.formBuilder = formBuilder;
+    this.supportRequestService = supportRequestService;
+
+    this.supportForm = this.formBuilder.group({
+      fullName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      priority: ['normal', Validators.required],
+      title: ['', Validators.required],
+      description: ['', [Validators.required, Validators.minLength(20)]]
+    });
+  }
 
   submitRequest(): void {
     this.attemptedSubmit = true;
@@ -30,6 +42,42 @@ export class GetSupportComponent {
       return;
     }
 
-    this.submitted = true;
+    const priorityMap: Record<string, number> = {
+      low: 1,
+      normal: 2,
+      high: 3
+    };
+
+    const payload = {
+      fullname: this.supportForm.controls['fullName'].value,
+      email: this.supportForm.controls['email'].value,
+      subject: 1,
+      priority: priorityMap[this.supportForm.controls['priority'].value] ?? 2,
+      title: this.supportForm.controls['title'].value,
+      description: this.supportForm.controls['description'].value
+    };
+
+    this.isSubmitting = true;
+    this.statusMessage = '';
+
+    this.supportRequestService.create(payload).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        this.submitted = true;
+        const requestCode = response?.data?.requestCode;
+        this.statusMessage = requestCode
+          ? `Talebiniz başarıyla oluşturuldu. Talep kodunuz: ${requestCode}`
+          : response?.message || 'Talebiniz başarıyla oluşturuldu.';
+        this.supportForm.reset({
+          priority: 'normal'
+        });
+        this.attemptedSubmit = false;
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        this.submitted = false;
+        this.statusMessage = error?.error?.message || 'Talep oluşturulurken bir hata oluştu.';
+      }
+    });
   }
 }

@@ -1,0 +1,78 @@
+@use '../admin-login/admin-login.component.scss';
+
+.register-content {
+  width: min(100%, 480px);
+}
+
+.register-heading {
+  margin-bottom: 1.4rem;
+}
+
+.register-form {
+  gap: 1rem;
+}
+
+.register-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 1rem;
+}
+
+.field-wide {
+  grid-column: 1 / -1;
+}
+
+.register-fields .field-group select {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.85rem 2.3rem 0.85rem 0.95rem;
+  border: 1px solid #d4d9ce;
+  border-radius: 7px;
+  outline: none;
+  background-color: #fbfaf6;
+  color: #182b28;
+  font: inherit;
+  font-size: 0.88rem;
+}
+
+.register-fields .field-group select:focus {
+  border-color: #39806d;
+  box-shadow: 0 0 0 3px rgba(57, 128, 109, 0.13);
+}
+
+.register-fields .field-group select:disabled {
+  color: #89958e;
+}
+
+.register-fields .field-group select.invalid-field {
+  border-color: #b74d43;
+}
+
+.register-content .back-link {
+  margin-top: 1.2rem;
+}
+
+@media (max-width: 520px) {
+  .register-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .field-wide {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .register-area {
+    justify-content: flex-start;
+  }
+
+  .register-content {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .register-content .mobile-brand {
+    margin-bottom: 2.25rem;
+  }
+}

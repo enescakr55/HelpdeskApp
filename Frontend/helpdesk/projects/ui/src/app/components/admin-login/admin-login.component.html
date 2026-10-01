@@ -1,0 +1,97 @@
+<main class="admin-login-page">
+  <section class="login-story" aria-labelledby="story-title">
+    <a class="story-brand" routerLink="/" aria-label="Destek Merkezi ana sayfa">
+      <span class="brand-mark" aria-hidden="true">D</span>
+      <span>Destek Merkezi</span>
+    </a>
+
+    <div class="story-copy">
+      <span class="story-kicker">YÖNETİCİ ALANI</span>
+      <h1 id="story-title">İyi destek,<br>iyi bir bakışla başlar.</h1>
+      <p>Destek taleplerini tek bir yerden takip edin, ekibinizin işini kolaylaştırın.</p>
+    </div>
+
+    <div class="story-bottom">
+      <span class="security-mark" aria-hidden="true">+</span>
+      <span>Güvenli yönetici erişimi</span>
+      <span class="story-year">2026</span>
+    </div>
+  </section>
+
+  <section class="login-area" aria-labelledby="login-title">
+    <div class="login-content">
+      <a class="mobile-brand" routerLink="/">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span>Destek Merkezi</span>
+      </a>
+
+      <div class="login-heading">
+        <span class="login-eyebrow">YÖNETİCİ GİRİŞİ</span>
+        <h2 id="login-title">Tekrar hoş geldiniz</h2>
+        <p>Yönetim alanına devam etmek için giriş yapın.</p>
+      </div>
+
+      <form class="login-form" [formGroup]="loginForm" (ngSubmit)="submitLogin()" novalidate>
+        <div class="field-group">
+          <label for="email">E-posta adresi</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="yonetici@ornek.com"
+            autocomplete="username"
+            [class.invalid-field]="loginForm.controls['email'].invalid && loginForm.controls['email'].touched"
+            [attr.aria-invalid]="loginForm.controls['email'].invalid && loginForm.controls['email'].touched"
+            aria-describedby="email-error"
+          >
+          <span class="field-error" id="email-error" *ngIf="loginForm.controls['email'].hasError('required') && loginForm.controls['email'].touched">
+            E-posta adresinizi girin.
+          </span>
+          <span class="field-error" id="email-error" *ngIf="loginForm.controls['email'].hasError('email') && loginForm.controls['email'].touched">
+            Geçerli bir e-posta adresi girin.
+          </span>
+        </div>
+
+        <div class="field-group">
+          <div class="password-label-row">
+            <label for="password">Parola</label>
+          </div>
+          <div class="password-control">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Parolanızı girin"
+              autocomplete="current-password"
+              [class.invalid-field]="loginForm.controls['password'].invalid && loginForm.controls['password'].touched"
+              [attr.aria-invalid]="loginForm.controls['password'].invalid && loginForm.controls['password'].touched"
+              aria-describedby="password-error"
+            >
+            <button class="password-toggle" type="button" (click)="showPassword = !showPassword" [attr.aria-pressed]="showPassword">
+              {{ showPassword ? 'Gizle' : 'Göster' }}
+            </button>
+          </div>
+          <span class="field-error" id="password-error" *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched">
+            Parolanızı girin.
+          </span>
+        </div>
+
+        <button class="login-button" type="submit" [disabled]="isSubmitting">
+          <span>{{ isSubmitting ? 'Kontrol ediliyor...' : 'Yönetici olarak giriş yap' }}</span>
+          <span class="button-arrow" aria-hidden="true">&#8594;</span>
+        </button>
+
+        <p class="status-message" [class.status-success]="statusType === 'success'" [class.status-error]="statusType === 'error'" role="status" aria-live="polite" *ngIf="statusMessage">
+          {{ statusMessage }}
+        </p>
+      </form>
+
+      <a class="back-link" routerLink="/">
+        <span aria-hidden="true">&#8592;</span> Destek merkezine dön
+      </a>
+      <a class="register-link" routerLink="/register">Yönetici hesabınız yok mu? Başvuru yapın</a>
+    </div>
+
+    <footer class="login-footer">Yalnızca yetkili yöneticiler içindir.</footer>
+  </section>
+</main>

@@ -1,0 +1,148 @@
+<main class="admin-login-page">
+  <section class="login-story" aria-labelledby="story-title">
+    <a class="story-brand" routerLink="/" aria-label="Destek Merkezi ana sayfa">
+      <span class="brand-mark" aria-hidden="true">D</span>
+      <span>Destek Merkezi</span>
+    </a>
+
+    <div class="story-copy">
+      <span class="story-kicker">YÖNETİCİ BAŞVURUSU</span>
+      <h1 id="story-title">Destek ekibine<br>katılın.</h1>
+      <p>Yönetici erişimi için başvurun. Bilgileriniz mevcut bir yönetici tarafından incelensin.</p>
+    </div>
+
+    <div class="story-bottom">
+      <span class="security-mark" aria-hidden="true">+</span>
+      <span>Başvurunuz yönetici onayına sunulur</span>
+      <span class="story-year">2026</span>
+    </div>
+  </section>
+
+  <section class="login-area register-area" aria-labelledby="register-title">
+    <div class="login-content register-content">
+      <a class="mobile-brand" routerLink="/">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span>Destek Merkezi</span>
+      </a>
+
+      <div class="login-heading register-heading">
+        <span class="login-eyebrow">YÖNETİCİ KAYDI</span>
+        <h2 id="register-title">Yönetici başvurusu</h2>
+        <p>Başvurunuz onaylandıktan sonra yönetim alanına erişebilirsiniz.</p>
+      </div>
+
+      <form class="login-form register-form" [formGroup]="registerForm" (ngSubmit)="submitRegistration()" novalidate>
+        <div class="register-fields">
+          <div class="field-group">
+            <label for="firstname">Ad</label>
+            <input
+              id="firstname"
+              type="text"
+              formControlName="firstname"
+              placeholder="Adınız"
+              autocomplete="given-name"
+              [class.invalid-field]="registerForm.controls['firstname'].invalid && registerForm.controls['firstname'].touched"
+              [attr.aria-invalid]="registerForm.controls['firstname'].invalid && registerForm.controls['firstname'].touched"
+            >
+            <span class="field-error" *ngIf="registerForm.controls['firstname'].invalid && registerForm.controls['firstname'].touched">Adınızı girin.</span>
+          </div>
+
+          <div class="field-group">
+            <label for="lastname">Soyad</label>
+            <input
+              id="lastname"
+              type="text"
+              formControlName="lastname"
+              placeholder="Soyadınız"
+              autocomplete="family-name"
+              [class.invalid-field]="registerForm.controls['lastname'].invalid && registerForm.controls['lastname'].touched"
+              [attr.aria-invalid]="registerForm.controls['lastname'].invalid && registerForm.controls['lastname'].touched"
+            >
+            <span class="field-error" *ngIf="registerForm.controls['lastname'].invalid && registerForm.controls['lastname'].touched">Soyadınızı girin.</span>
+          </div>
+
+          <div class="field-group field-wide">
+            <label for="register-email">E-posta adresi</label>
+            <input
+              id="register-email"
+              type="email"
+              formControlName="email"
+              placeholder="ornek@eposta.com"
+              autocomplete="email"
+              [class.invalid-field]="registerForm.controls['email'].invalid && registerForm.controls['email'].touched"
+              [attr.aria-invalid]="registerForm.controls['email'].invalid && registerForm.controls['email'].touched"
+            >
+            <span class="field-error" *ngIf="registerForm.controls['email'].hasError('required') && registerForm.controls['email'].touched">E-posta adresinizi girin.</span>
+            <span class="field-error" *ngIf="registerForm.controls['email'].hasError('email') && registerForm.controls['email'].touched">Geçerli bir e-posta adresi girin.</span>
+          </div>
+
+          <div class="field-group field-wide">
+            <label for="departmentId">Departman</label>
+            <select
+              id="departmentId"
+              formControlName="departmentId"
+              [disabled]="isLoadingDepartments || departments.length === 0"
+              [class.invalid-field]="registerForm.controls['departmentId'].invalid && registerForm.controls['departmentId'].touched"
+            >
+              <option value="" disabled>
+                {{ isLoadingDepartments ? 'Departmanlar yükleniyor...' : departments.length ? 'Departman seçin' : 'Kullanılabilir departman yok' }}
+              </option>
+              <option *ngFor="let department of departments" [value]="department.id">{{ department.departmentName }}</option>
+            </select>
+            <span class="field-error" *ngIf="registerForm.controls['departmentId'].invalid && registerForm.controls['departmentId'].touched">Bir departman seçin.</span>
+          </div>
+
+          <div class="field-group">
+            <label for="register-password">Parola</label>
+            <div class="password-control">
+              <input
+                id="register-password"
+                [type]="showPassword ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="En az 8 karakter"
+                autocomplete="new-password"
+                [class.invalid-field]="registerForm.controls['password'].invalid && registerForm.controls['password'].touched"
+                [attr.aria-invalid]="registerForm.controls['password'].invalid && registerForm.controls['password'].touched"
+              >
+              <button class="password-toggle" type="button" (click)="showPassword = !showPassword" [attr.aria-pressed]="showPassword">
+                {{ showPassword ? 'Gizle' : 'Göster' }}
+              </button>
+            </div>
+            <span class="field-error" *ngIf="registerForm.controls['password'].hasError('required') && registerForm.controls['password'].touched">Parolanızı girin.</span>
+            <span class="field-error" *ngIf="registerForm.controls['password'].hasError('minlength') && registerForm.controls['password'].touched">Parola en az 8 karakter olmalıdır.</span>
+          </div>
+
+          <div class="field-group">
+            <label for="confirmPassword">Parola tekrar</label>
+            <input
+              id="confirmPassword"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              placeholder="Parolanızı tekrar girin"
+              autocomplete="new-password"
+              [class.invalid-field]="(registerForm.controls['confirmPassword'].invalid || passwordsDoNotMatch) && registerForm.controls['confirmPassword'].touched"
+              [attr.aria-invalid]="(registerForm.controls['confirmPassword'].invalid || passwordsDoNotMatch) && registerForm.controls['confirmPassword'].touched"
+            >
+            <span class="field-error" *ngIf="registerForm.controls['confirmPassword'].invalid && registerForm.controls['confirmPassword'].touched">Parolanızı tekrar girin.</span>
+            <span class="field-error" *ngIf="passwordsDoNotMatch && registerForm.controls['confirmPassword'].touched">Parolalar eşleşmiyor.</span>
+          </div>
+        </div>
+
+        <button class="login-button" type="submit" [disabled]="isSubmitting || isLoadingDepartments || departments.length === 0">
+          <span>{{ isSubmitting ? 'Başvuru gönderiliyor...' : 'Yönetici başvurusu gönder' }}</span>
+          <span class="button-arrow" aria-hidden="true">&#8594;</span>
+        </button>
+
+        <p class="status-message" [class.status-success]="statusType === 'success'" [class.status-error]="statusType === 'error'" role="status" aria-live="polite" *ngIf="statusMessage">
+          {{ statusMessage }}
+        </p>
+      </form>
+
+      <a class="back-link" routerLink="/admin/login">
+        Zaten yöneticisiniz mi? Giriş yapın
+      </a>
+    </div>
+
+    <footer class="login-footer">Başvurunuz mevcut bir yönetici tarafından değerlendirilir.</footer>
+  </section>
+</main>

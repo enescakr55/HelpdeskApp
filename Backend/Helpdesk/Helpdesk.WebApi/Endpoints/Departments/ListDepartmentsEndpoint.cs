@@ -17,7 +17,7 @@ public class ListDepartmentsEndpoint : EndpointWithoutRequest<IDataResult<List<D
   public override void Configure()
   {
     Get("api/departments");
-    Roles("Admin", "User");
+    AllowAnonymous();
   }
 
   public override async Task HandleAsync(CancellationToken ct)
