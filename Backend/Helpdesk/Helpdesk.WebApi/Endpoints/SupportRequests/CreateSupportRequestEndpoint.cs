@@ -17,7 +17,7 @@ public class CreateSupportRequestEndpoint : Endpoint<CreateSupportRequestModel, 
 
   public override void Configure()
   {
-    Post("api/support-requests");
+    Post("api/support-requests/create");
     AllowAnonymous();
   }
 
