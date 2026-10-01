@@ -1,0 +1,154 @@
+<main class="support-page">
+  <div class="support-shell container">
+    <header class="support-header">
+      <a class="brand" href="#" aria-label="Destek Merkezi ana sayfa">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span>Destek Merkezi</span>
+      </a>
+      <span class="header-caption">Size yardımcı olmak için buradayız</span>
+    </header>
+
+    <section class="support-content" aria-labelledby="page-title">
+      <div class="intro">
+        <span class="eyebrow"><span class="status-dot"></span> DESTEK TALEBİ</span>
+        <h1 id="page-title">Size nasıl yardımcı olabiliriz?</h1>
+        <p class="intro-copy">
+          Yaşadığınız sorunu bize anlatın. Ekibimiz talebinizi inceleyip size
+          yardımcı olacak.
+        </p>
+
+        <aside class="help-card">
+          <div class="help-icon" aria-hidden="true">i</div>
+          <div>
+            <h2>Daha hızlı destek için</h2>
+            <p>Sorununuzu ve varsa aldığınız hata mesajını ayrıntılı şekilde paylaşın.</p>
+          </div>
+        </aside>
+
+        <div class="privacy-note">
+          <span aria-hidden="true">✓</span>
+          <p>Bilgileriniz yalnızca destek talebinizle ilgili iletişim için kullanılır.</p>
+        </div>
+      </div>
+
+      <section class="form-card" aria-label="Destek talebi formu">
+        <div class="form-heading">
+          <div>
+            <h2>Yeni destek talebi</h2>
+            <p>Alanları doldurun, size yardımcı olalım.</p>
+          </div>
+          <span class="required-note"><span aria-hidden="true">*</span> Zorunlu alan</span>
+        </div>
+
+        <form [formGroup]="supportForm" (ngSubmit)="submitRequest()" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="fullName" class="form-label">Ad soyad <span>*</span></label>
+              <input
+                id="fullName"
+                type="text"
+                class="form-control"
+                formControlName="fullName"
+                placeholder="Adınızı ve soyadınızı girin"
+                autocomplete="name"
+                [class.is-invalid]="supportForm.controls.fullName.invalid && (supportForm.controls.fullName.touched || attemptedSubmit)"
+              >
+              <div class="invalid-feedback">Lütfen adınızı ve soyadınızı girin.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="email" class="form-label">E-posta adresi <span>*</span></label>
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                formControlName="email"
+                placeholder="ornek@eposta.com"
+                autocomplete="email"
+                [class.is-invalid]="supportForm.controls.email.invalid && (supportForm.controls.email.touched || attemptedSubmit)"
+              >
+              <div class="invalid-feedback">
+                {{ supportForm.controls.email.hasError('required') ? 'E-posta adresinizi girin.' : 'Geçerli bir e-posta adresi girin.' }}
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="category" class="form-label">Konu <span>*</span></label>
+              <select
+                id="category"
+                class="form-select"
+                formControlName="category"
+                [class.is-invalid]="supportForm.controls.category.invalid && (supportForm.controls.category.touched || attemptedSubmit)"
+              >
+                <option value="" disabled>Konu seçin</option>
+                <option value="account">Hesap ve giriş</option>
+                <option value="technical">Teknik sorun</option>
+                <option value="billing">Ödeme ve faturalandırma</option>
+                <option value="other">Diğer</option>
+              </select>
+              <div class="invalid-feedback">Lütfen bir konu seçin.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="priority" class="form-label">Öncelik</label>
+              <select id="priority" class="form-select" formControlName="priority">
+                <option value="low">Düşük</option>
+                <option value="normal">Normal</option>
+                <option value="high">Yüksek</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label for="subject" class="form-label">Talep başlığı <span>*</span></label>
+              <input
+                id="subject"
+                type="text"
+                class="form-control"
+                formControlName="subject"
+                placeholder="Sorununuzu kısaca özetleyin"
+                [class.is-invalid]="supportForm.controls.subject.invalid && (supportForm.controls.subject.touched || attemptedSubmit)"
+              >
+              <div class="invalid-feedback">Lütfen talebiniz için bir başlık yazın.</div>
+            </div>
+
+            <div class="col-12">
+              <label for="message" class="form-label">Açıklama <span>*</span></label>
+              <textarea
+                id="message"
+                class="form-control message-input"
+                formControlName="message"
+                rows="5"
+                placeholder="Sorunu ne zaman fark ettiğinizi ve neler denediğinizi anlatın..."
+                [class.is-invalid]="supportForm.controls.message.invalid && (supportForm.controls.message.touched || attemptedSubmit)"
+              ></textarea>
+              <div class="field-hint">
+                <span
+                  class="text-danger"
+                  *ngIf="supportForm.controls.message.hasError('minlength') && (supportForm.controls.message.touched || attemptedSubmit)"
+                >En az 20 karakter yazın.</span>
+                <span *ngIf="!supportForm.controls.message.hasError('minlength')">En az 20 karakter</span>
+                <span>{{ supportForm.controls.message.value.length }} karakter</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <p><span aria-hidden="true">*</span> ile işaretli alanların doldurulması zorunludur.</p>
+            <button class="btn submit-button" type="submit">
+              Talebi gönder <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <div class="alert alert-info submit-notice mb-0" role="status" *ngIf="submitted">
+            Formunuz kontrol edildi. Destek ekibine iletilmesi için sunucu tarafındaki gönderim servisinin bağlanması gerekiyor.
+          </div>
+        </form>
+      </section>
+    </section>
+
+    <footer class="support-footer">
+      <span>Yardım istemek için doğru yerdesiniz.</span>
+      <span>© 2026 Destek Merkezi</span>
+    </footer>
+  </div>
+</main>

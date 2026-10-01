@@ -1,0 +1,219 @@
+# =========================================================
+# C# / .NET
+# =========================================================
+
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.coverage
+*.coveragexml
+
+# .NET generated files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+
+# NuGet cache / generated files
+.nuget/
+
+# ASP.NET Core
+wwwroot/lib/
+
+# Entity Framework
+*.db
+*.db-shm
+*.db-wal
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.rsuser
+
+# Visual Studio
+.vs/
+*.csproj.user
+*.vcxproj.user
+*.sln.docstates
+
+# Rider / ReSharper
+.idea/
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Visual Studio Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# =========================================================
+# ASP.NET / .NET Configuration & Secrets
+# =========================================================
+
+# Local development settings
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.Local.json
+
+# User secrets
+secrets.json
+
+# Environment variables
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Certificates / local HTTPS
+*.pfx
+*.p12
+*.pem
+*.key
+*.crt
+
+# =========================================================
+# Angular / Node.js
+# =========================================================
+
+# Dependencies
+node_modules/
+
+# Angular build
+dist/
+out-tsc/
+.angular/
+
+# Angular cache
+.cache/
+
+# npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Package manager caches
+.npm/
+.yarn/
+.pnpm-store/
+
+# Optional npm cache
+*.tgz
+
+# Angular environment files containing secrets
+# Keep environment.example.ts files in Git
+src/environments/environment.local.ts
+src/environments/environment.*.local.ts
+
+# =========================================================
+# Logs
+# =========================================================
+
+*.log
+logs/
+
+# =========================================================
+# OS generated files
+# =========================================================
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+
+# =========================================================
+# Temporary / Backup files
+# =========================================================
+
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.orig
+
+# =========================================================
+# Coverage / Quality tools
+# =========================================================
+
+coverage/
+.nyc_output/
+TestResults/
+
+# SonarQube
+.sonar/
+
+# =========================================================
+# Docker
+# =========================================================
+
+# Local Docker overrides
+docker-compose.override.yml
+
+# Docker environment
+.env.docker
+
+# =========================================================
+# Publish output
+# =========================================================
+
+publish/
+[Ww]eb[Pp]ublish/
+*.publishsettings
+
+# =========================================================
+# Database / Local development
+# =========================================================
+
+# SQLite
+*.sqlite
+*.sqlite3
+*.sqlite-shm
+*.sqlite-wal
+
+# Local SQL Server database files
+*.mdf
+*.ldf
+
+# =========================================================
+# Generated files
+# =========================================================
+
+*.generated.cs
+*.g.cs
+*.g.i.cs
+
+# =========================================================
+# OS / IDE metadata
+# =========================================================
+
+.vsconfig
+*.pidb
+*.pdb
+*.cache
