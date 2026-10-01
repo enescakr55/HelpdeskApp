@@ -1,0 +1,38 @@
+<div class="admin-shell">
+  <button class="sidebar-scrim" *ngIf="sidebarOpen" type="button" aria-label="Menüyü kapat" (click)="closeSidebar()"></button>
+
+  <aside class="admin-sidebar" [class.sidebar-open]="sidebarOpen">
+    <div class="sidebar-brand">
+      <span class="brand-mark" aria-hidden="true">D</span>
+      <div><strong>Destek Merkezi</strong><span>YÖNETİM</span></div>
+      <button class="sidebar-close" type="button" aria-label="Menüyü kapat" (click)="closeSidebar()">×</button>
+    </div>
+
+    <p class="nav-caption">ÇALIŞMA ALANI</p>
+    <nav class="admin-nav" aria-label="Yönetim menüsü">
+      <button type="button" routerLink="/admin/support-requests" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">
+        <span class="nav-index">01</span><span>Destek Talepleri</span>
+      </button>
+      <button type="button" routerLink="/admin/departments" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">
+        <span class="nav-index">02</span><span>Departmanlar</span>
+      </button>
+      <button type="button" routerLink="/admin/users" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">
+        <span class="nav-index">03</span><span>Kullanıcılar</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="admin-identity"><span class="avatar">Y</span><div><strong>Yönetici</strong><span>Admin hesabı</span></div></div>
+      <button class="logout-button" type="button" (click)="logout()"><span aria-hidden="true">↗</span> Oturumu kapat</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="main-header">
+      <button class="mobile-menu" type="button" aria-label="Menüyü aç" (click)="sidebarOpen = true">☰</button>
+      <div class="header-title"><span class="header-eyebrow">DESTEK OPERASYONLARI</span><h1>Yönetim</h1></div>
+      <div class="header-date"><span class="online-dot"></span> Sistem aktif</div>
+    </header>
+    <div class="workspace"><router-outlet></router-outlet></div>
+  </main>
+</div>

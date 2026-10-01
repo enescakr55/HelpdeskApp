@@ -1,0 +1,41 @@
+<section class="admin-section" aria-labelledby="users-heading">
+  <div class="section-toolbar">
+    <div><h2 id="users-heading">Kullanıcılar</h2><p>Kullanıcı hesaplarını ve yönetici başvurularını inceleyin.</p></div>
+    <label class="search-field"><span aria-hidden="true">⌕</span><input type="search" [(ngModel)]="userSearch" placeholder="Kullanıcı ara" aria-label="Kullanıcı ara"></label>
+  </div>
+
+  <div class="approval-section">
+    <div class="subsection-heading"><div><span class="subsection-kicker">ONAY GEREKİYOR</span><h2>Yönetici başvuruları</h2></div><span class="approval-count">{{ pendingManagers.length }} bekliyor</span></div>
+    <div class="table-frame">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>AD SOYAD</th><th>E-POSTA</th><th>DEPARTMAN</th><th>BAŞVURU DURUMU</th><th>İŞLEM</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let user of pendingManagers">
+              <td><strong class="person-name">{{ user.firstname }} {{ user.lastname }}</strong></td><td>{{ user.email }}</td><td>{{ departmentName(user.departmentId) }}</td><td><span class="approval-pill">Onay bekliyor</span></td>
+              <td><button class="approve-action" type="button" (click)="approveManager(user)">Onayla</button></td>
+            </tr>
+            <tr *ngIf="pendingManagers.length === 0"><td colspan="5" class="empty-state">Bekleyen yönetici başvurusu yok.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection-heading users-list-heading"><div><span class="subsection-kicker">HESAPLAR</span><h2>Tüm kullanıcılar</h2></div><span class="approval-count">{{ users.length }} kayıt</span></div>
+  <div class="table-frame">
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>AD SOYAD</th><th>E-POSTA</th><th>DEPARTMAN</th><th>ROL</th><th>HESAP DURUMU</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let user of filteredUsers">
+            <td><strong class="person-name">{{ user.firstname }} {{ user.lastname }}</strong></td><td>{{ user.email }}</td><td>{{ departmentName(user.departmentId) }}</td><td>{{ user.isAdmin ? 'Yönetici' : 'Kullanıcı' }}</td>
+            <td><span class="account-pill" [class.account-active]="user.isActive">{{ user.isActive ? 'Aktif' : 'Onay bekliyor' }}</span></td>
+          </tr>
+          <tr *ngIf="!loadingUsers && filteredUsers.length === 0"><td colspan="5" class="empty-state">{{ userSearch ? 'Kullanıcı bulunamadı.' : 'Kullanıcı kaydı yok.' }}</td></tr>
+          <tr *ngIf="loadingUsers"><td colspan="5" class="empty-state">Kullanıcılar yükleniyor...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

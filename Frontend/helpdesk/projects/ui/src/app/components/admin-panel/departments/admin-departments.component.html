@@ -1,0 +1,32 @@
+<section class="admin-section" aria-labelledby="departments-heading">
+  <div class="section-toolbar">
+    <div><h2 id="departments-heading">Departmanlar</h2><p>Destek taleplerinin yönlendirileceği ekipleri yönetin.</p></div>
+    <button class="primary-action" type="button" (click)="openNewDepartment()"><span aria-hidden="true">+</span> Departman ekle</button>
+  </div>
+
+  <form class="department-editor" *ngIf="showEditor" [formGroup]="departmentForm" (ngSubmit)="saveDepartment()">
+    <div class="editor-heading"><strong>{{ editingDepartmentId ? 'Departmanı düzenle' : 'Yeni departman' }}</strong><button type="button" aria-label="Formu kapat" (click)="closeEditor()">×</button></div>
+    <div class="editor-fields">
+      <div class="field-group"><label for="departmentName">Departman adı</label><input id="departmentName" type="text" formControlName="departmentName" placeholder="Örn. Teknik Destek"><span class="field-error" *ngIf="departmentForm.controls['departmentName'].invalid && departmentForm.controls['departmentName'].touched">En az 2 karakter girin.</span></div>
+      <button class="primary-action" type="submit" [disabled]="savingDepartment">{{ savingDepartment ? 'Kaydediliyor...' : 'Kaydet' }}</button>
+    </div>
+  </form>
+
+  <div class="table-frame">
+    <div class="table-toolbar"><span>{{ departments.length }} departman</span><label class="search-field"><span aria-hidden="true">⌕</span><input type="search" [(ngModel)]="departmentSearch" placeholder="Departman ara" aria-label="Departman ara"></label></div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>DEPARTMAN ADI</th><th>DEPARTMAN ID</th><th class="actions-heading">İŞLEMLER</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let department of filteredDepartments">
+            <td><strong class="person-name">{{ department.departmentName }}</strong></td>
+            <td><span class="secondary-text">{{ department.id }}</span></td>
+            <td class="row-actions"><button class="text-action" type="button" (click)="editDepartment(department)">Düzenle</button><button class="text-action danger-action" type="button" (click)="deleteDepartment(department)">Sil</button></td>
+          </tr>
+          <tr *ngIf="!loadingDepartments && filteredDepartments.length === 0"><td colspan="3" class="empty-state">{{ departmentSearch ? 'Departman bulunamadı.' : 'Henüz departman eklenmemiş.' }}</td></tr>
+          <tr *ngIf="loadingDepartments"><td colspan="3" class="empty-state">Departmanlar yükleniyor...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

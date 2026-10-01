@@ -1,0 +1,66 @@
+<section class="admin-section" aria-labelledby="requests-heading">
+  <div class="section-toolbar">
+    <div><h2 id="requests-heading">Destek Talepleri</h2><p>Destek kayıtlarını inceleyin ve ilgili ekibe yönlendirin.</p></div>
+    <label class="search-field"><span aria-hidden="true">⌕</span><input type="search" [(ngModel)]="requestSearch" placeholder="Talep ara" aria-label="Talep ara"></label>
+  </div>
+
+  <div class="metric-strip">
+    <div class="metric-item"><span>Toplam talep</span><strong>{{ requests.length }}</strong></div>
+    <div class="metric-item"><span>Açık / işlemde</span><strong>{{ openRequestCount }}</strong></div>
+    <div class="metric-item"><span>Diğer durumlar</span><strong>{{ requests.length - openRequestCount }}</strong></div>
+  </div>
+
+  <div class="table-frame">
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>TALEP</th><th>TALEP SAHİBİ</th><th>DEPARTMAN</th><th>ÖNCELİK</th><th>DURUM</th><th>İŞLEM</th></tr></thead>
+        <tbody *ngFor="let request of filteredRequests">
+          <tr >
+            <td class="request-cell"><strong>{{ request.title }}</strong><span>{{ request.requestCode }}</span></td>
+            <td><strong class="person-name">{{ request.fullname }}</strong><span class="secondary-text">{{ request.email }}</span></td>
+            <td>
+              <select class="table-select department-select" [value]="request.assignedDepartmentId || ''" (change)="assignDepartment(request, $event)" aria-label="Talebi departmana ata">
+                <option value="" disabled="true">Atanmadı</option>
+                <option *ngFor="let department of departments" [selected]="department.id == request.assignedDepartmentId" [value]="department.id">{{ department.departmentName }}</option>
+              </select>
+            </td>
+            <td><span class="priority-label" [class.priority-high]="request.priority === 3">{{ priorityLabel(request.priority) }}</span></td>
+            <td>
+              <select class="table-select status-select" [class]="'table-select status-select ' + statusClass(request.status)" [value]="request.status" (change)="changeStatus(request, $event)" aria-label="Talep durumunu değiştir">
+                <option *ngFor="let status of statusOptions" [selected]="status.value == request.status" [value]="status.value">{{ status.label }}</option>
+              </select>
+            </td>
+            <td><button class="text-action" type="button" [attr.title]="request.description" (click)="showDescription(request)">Detaylar</button></td>
+            
+          </tr>
+          <tr class="detail-row" *ngIf="showDetails == request.id">
+            <td colspan="6">
+              <div class="desc-div" >
+                <div class="desc-title">
+                  <b>Açıklama</b>
+                </div>
+                <div class="desc-text">{{request.description}}</div></div>
+                <hr>
+                <div class="update-message">
+                  <b class="update-message-title">{{updateUserMessage ? 'Kullanıcı Mesajı Güncelleme' : 'Destek Talebi Güncelleme'}}</b>
+                  <textarea class="form-control form-control-sm" [attr.request]="request.id" id="update-message-textarea" style="font-size: 11px;">{{updateUserMessage == false ? request.assignMessage : request.userMessage}}</textarea>
+                  <div class="two-element-container">
+                    <div class="two-element-container-left">
+                      <label for="update-user-message">
+                      <input id="update-user-message" (change)="updateUserMessageInput($event)"  [attr.request]="request.id" style="vertical-align: middle;" name="update-user-message" type="checkbox" value="user"/> Kullanıcı mesajını güncelle</label>
+                    </div>
+                    <div class="two-element-container-right">
+                      <button type="button" class="btn btn btn-sm btn-warning" style="font-size: 10px;" (click)="updateMessage(request);">Güncelle</button>
+                    </div>
+                  </div>
+                  
+                </div>
+            </td>
+          </tr>
+          <tr *ngIf="!loadingRequests && filteredRequests.length === 0"><td colspan="6" class="empty-state">{{ requestSearch ? 'Aramanızla eşleşen talep yok.' : 'Henüz destek talebi bulunmuyor.' }}</td></tr>
+          <tr *ngIf="loadingRequests"><td colspan="6" class="empty-state">Talepler yükleniyor...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

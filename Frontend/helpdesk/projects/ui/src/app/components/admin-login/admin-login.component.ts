@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-login',
@@ -17,7 +19,9 @@ export class AdminLoginComponent {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly toastr:ToastrService,
+    private readonly router: Router
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -50,14 +54,15 @@ export class AdminLoginComponent {
         }
 
         localStorage.setItem('authToken', response.data.token);
+        localStorage.setItem('authRole', 'Admin');
         this.statusType = 'success';
         this.statusMessage = `Hoş geldiniz, ${response.data.firstname} ${response.data.lastname}. Yönetici oturumunuz açıldı.`;
+        this.router.navigate(['/admin']);
       },
       error: (error) => {
         this.isSubmitting = false;
         this.showError(
           error?.error?.message ||
-          error?.error?.Message ||
           'Giriş yapılamadı. E-posta ve parolanızı kontrol edin.'
         );
       }
